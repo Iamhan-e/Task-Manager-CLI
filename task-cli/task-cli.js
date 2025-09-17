@@ -2,7 +2,6 @@
 
 const fs= require('fs')
 const path= require('path')
-const { json } = require('stream/consumers')
 
 const dataFile= path.join(__dirname,"tasks.json")
 
@@ -30,6 +29,26 @@ function saveTasks(tasks){
     } catch (error) {
         console.log( `error: ${error.message}`)
     }
+}
+
+function addTask(description){
+    if(!description){
+        console.log("No description provided")
+        return
+    }
+
+    tasks= loadTasks()
+    const newTask = {
+    id: Date.now(),
+    description,
+    status: 'todo',
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  };
+
+  tasks.push(newTask)
+  saveTasks(tasks)
+  console.log(`Task added successfully (ID: ${newTask.id})`);
 }
 
 const [,, command, ...args]= process.argv
